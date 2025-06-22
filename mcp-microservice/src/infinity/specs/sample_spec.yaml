@@ -1,0 +1,6 @@
+prompt: "Entwerfe ein neues Dashboard f\u00fcr das NeuroERP."
+model: "gpt-3.5-turbo"
+max_tokens: 150
+parallel_agents: 2
+count: 1
+output_dir: "agent_outputs"

@@ -16,3 +16,13 @@ source venv/bin/activate
 pip install -r requirements.txt
 uvicorn src.main:app --reload --port 8015
 ```
+
+## Infinity Agentic Loop
+
+Im Verzeichnis `src/infinity` befindet sich ein Skript, das mehrere Agenten in Wellen startet und die Ergebnisse als Textdateien speichert. Es kann separat genutzt werden, um kreative Iterationen zu erzeugen.
+
+Aufrufbeispiel:
+
+```bash
+python -m infinity.loop src/infinity/specs/sample_spec.yaml
+```
