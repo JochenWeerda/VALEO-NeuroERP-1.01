@@ -1,156 +1,125 @@
 """
-Hauptanwendungsdatei für das AI-gestützte ERP-System.
-
-Diese Datei initialisiert die FastAPI-Anwendung und bindet alle API-Routen ein.
+Hauptanwendung für das VALEO NeuroERP Backend
 """
 
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import logging
-import os
+from sqlalchemy.orm import Session
+from typing import List
+import bcrypt
 
-from .database import engine, Base
-from .api import (
-    user_api, 
-    auth_api, 
-    quality_api, 
-    production_api, 
-    inventory_api, 
-    analytics_api, 
-    emergency_api,
-    notification_api
-)
+from db.database import get_db
+from models.user import User, UserRole
+from models import Role, Setting, SettingCategory, SettingValue, Tenant, TenantConfig
 
-# API-Router importieren
-try:
-    from backend.api import partner_router
-    from backend.api.emergency_api import router as emergency_router
-    from backend.api.anomaly_api import router as anomaly_router
-except ImportError:
-    try:
-        from api import partner_router
-        from api.emergency_api import router as emergency_router
-        from api.anomaly_api import router as anomaly_router
-    except ImportError:
-        # Für den Fall, dass die Import-Pfade nicht stimmen
-        from api.partner_api import router as partner_router
-        from api.emergency_api import router as emergency_router
-        from api.anomaly_api import router as anomaly_router
-
-# Services initialisieren
-try:
-    from backend.services.anomaly_detection_service import anomaly_detection_service
-except ImportError:
-    try:
-        from services.anomaly_detection_service import anomaly_detection_service
-    except ImportError:
-        pass  # Service wird dynamisch erstellt
-
-# Logging einrichten
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger(__name__)
-
-# Datenbank initialisieren
-Base.metadata.create_all(bind=engine)
-
-# FastAPI-Anwendung erstellen
 app = FastAPI(
-    title="KI-gesteuertes ERP für Futtermittelherstellung",
-    description="ERP-System für die Optimierung der Futtermittelproduktion mit KI-Funktionalitäten",
-    version="0.1.0"
+    title="VALEO NeuroERP API",
+    description="Backend API für das VALEO NeuroERP System",
+    version="1.0.1"
 )
 
-# CORS-Einstellungen
+# CORS-Konfiguration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # In Produktion anpassen
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Router registrieren
-app.include_router(auth_api.router)
-app.include_router(user_api.router)
-app.include_router(quality_api.router)
-app.include_router(production_api.router)
-app.include_router(inventory_api.router)
-app.include_router(analytics_api.router)
-app.include_router(emergency_api.router)
-app.include_router(notification_api.router)
-
-# Weitere Router können hier registriert werden
-
 @app.get("/")
 async def root():
-    return {
-        "message": "Willkommen im KI-gesteuerten ERP für Futtermittelherstellung",
-        "version": "0.1.0",
-        "docs_url": "/docs"
-    }
+    """Root-Endpunkt für Healthchecks"""
+    return {"status": "online", "version": "1.0.1"}
 
-@app.get("/health")
+@app.get("/api/health")
 async def health_check():
-    return {"status": "healthy"}
-
-# Stammdatenmodelle-Informationen
-@app.get("/api/info")
-def api_info():
-    """
-    Gibt Informationen über die verfügbaren Stammdatenmodelle zurück.
-    """
+    """Detaillierter Health-Check-Endpunkt"""
     return {
-        "name": "AI-gestütztes ERP-System API",
-        "version": "0.1.0",
-        "stammdatenmodelle": [
-            {
-                "name": "Partner",
-                "beschreibung": "Partner-Stammdaten (Kunden, Lieferanten, Mitarbeiter)",
-                "endpoint": "/api/v1/partner"
-            },
-            {
-                "name": "Artikel",
-                "beschreibung": "Artikel-Stammdaten",
-                "endpoint": "/api/v1/artikel"
-            },
-            {
-                "name": "Lager",
-                "beschreibung": "Lager-Stammdaten",
-                "endpoint": "/api/v1/lager"
-            },
-            {
-                "name": "Finanzen",
-                "beschreibung": "Finanz-Stammdaten",
-                "endpoint": "/api/v1/finanzen"
-            },
-            {
-                "name": "Notfall",
-                "beschreibung": "Notfall- und Krisenmanagement",
-                "endpoint": "/api/v1/emergency"
-            },
-            {
-                "name": "Anomalieerkennung",
-                "beschreibung": "KI-basierte Anomalieerkennung für verschiedene Unternehmensbereiche",
-                "endpoint": "/api/v1/anomaly"
-            }
-        ]
+        "status": "healthy",
+        "version": "1.0.1",
+        "database": "connected"
     }
 
-if __name__ == "__main__":
-    import uvicorn
+# User-Endpunkte
+@app.get("/api/users", response_model=List[dict])
+async def get_users(db: Session = Depends(get_db)):
+    """Liste aller Benutzer abrufen"""
+    users = db.query(User).all()
+    return [{"id": str(user.id), "username": user.username, "email": user.email} for user in users]
+
+@app.post("/api/users")
+async def create_user(username: str, email: str, password: str, role: UserRole = UserRole.USER, db: Session = Depends(get_db)):
+    """Neuen Benutzer erstellen"""
+    # Prüfe, ob Benutzer bereits existiert
+    existing_user = db.query(User).filter(
+        (User.username == username) | (User.email == email)
+    ).first()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Benutzer existiert bereits")
     
-    # Konfiguration für den Uvicorn-Server
-    host = os.environ.get("HOST", "0.0.0.0")
-    port = int(os.environ.get("PORT", 8000))
+    # Erstelle neuen Benutzer
+    password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    user = User(
+        username=username,
+        email=email,
+        password_hash=password_hash,
+        role=role
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return {"id": str(user.id), "username": user.username, "email": user.email}
+
+# Tenant-Endpunkte
+@app.get("/api/tenants", response_model=List[dict])
+async def get_tenants(db: Session = Depends(get_db)):
+    """Liste aller Mandanten abrufen"""
+    tenants = db.query(Tenant).all()
+    return [{"id": str(tenant.id), "name": tenant.name, "status": tenant.status.value} for tenant in tenants]
+
+@app.post("/api/tenants")
+async def create_tenant(name: str, description: str = None, db: Session = Depends(get_db)):
+    """Neuen Mandanten erstellen"""
+    # Prüfe, ob Mandant bereits existiert
+    existing_tenant = db.query(Tenant).filter(Tenant.name == name).first()
+    if existing_tenant:
+        raise HTTPException(status_code=400, detail="Mandant existiert bereits")
     
-    logger.info(f"Server wird gestartet auf http://{host}:{port}")
-    logger.info("API-Dokumentation verfügbar unter: http://localhost:8000/docs")
+    # Erstelle neuen Mandanten
+    tenant = Tenant(
+        name=name,
+        description=description
+    )
+    db.add(tenant)
+    db.commit()
+    db.refresh(tenant)
+    return {"id": str(tenant.id), "name": tenant.name, "status": tenant.status.value}
+
+# Settings-Endpunkte
+@app.get("/api/settings", response_model=List[dict])
+async def get_settings(db: Session = Depends(get_db)):
+    """Liste aller Systemeinstellungen abrufen"""
+    settings = db.query(Setting).all()
+    return [{"id": str(setting.id), "key": setting.key, "value": setting.value} for setting in settings]
+
+@app.post("/api/settings")
+async def create_setting(key: str, value: str, description: str = None, db: Session = Depends(get_db)):
+    """Neue Systemeinstellung erstellen"""
+    # Prüfe, ob Einstellung bereits existiert
+    existing_setting = db.query(Setting).filter(Setting.key == key).first()
+    if existing_setting:
+        raise HTTPException(status_code=400, detail="Einstellung existiert bereits")
     
-    # Server starten
-    uvicorn.run("backend.main:app", host=host, port=port, reload=True) 
+    # Erstelle neue Einstellung
+    setting = Setting(
+        key=key,
+        value=value,
+        description=description
+    )
+    db.add(setting)
+    db.commit()
+    db.refresh(setting)
+    return {"id": str(setting.id), "key": setting.key, "value": setting.value}
+
+# API-Endpunkte hier erweitern... 

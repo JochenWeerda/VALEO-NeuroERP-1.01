@@ -11,10 +11,10 @@ import {
 } from './themeTypes';
 
 // Theme-Varianten importieren
-import defaultTheme from './variants/defaultTheme';
-import odooTheme from './variants/odooTheme';
-import modernTheme from './variants/modernTheme';
-import classicTheme from './variants/classicTheme';
+import getDefaultTheme from './variants/defaultTheme';
+import getOdooTheme from './variants/odooTheme';
+import getModernTheme from './variants/modernTheme';
+import getClassicTheme from './variants/classicTheme';
 
 // Hilfsfunktionen importieren
 import highContrastMode from './variants/highContrastMode';
@@ -145,17 +145,17 @@ export class ThemeService {
     let themeCreator;
     switch (variant) {
       case 'odoo':
-        themeCreator = odooTheme;
+        themeCreator = getOdooTheme;
         break;
       case 'modern':
-        themeCreator = modernTheme;
+        themeCreator = getModernTheme;
         break;
       case 'classic':
-        themeCreator = classicTheme;
+        themeCreator = getClassicTheme;
         break;
       case 'default':
       default:
-        themeCreator = defaultTheme;
+        themeCreator = getDefaultTheme;
     }
     
     // Basis-Theme erstellen

@@ -1,8 +1,20 @@
+"""
+Mandantenmodelle für das ERP-System.
+"""
+
 import uuid
+import enum
 from datetime import datetime
-from sqlalchemy import Column, String, Boolean, DateTime
+from sqlalchemy import Column, String, Boolean, DateTime, Enum, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
-from .base import Base, SessionLocal
+from backend.db.database import Base
+
+class TenantStatus(enum.Enum):
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    SUSPENDED = "suspended"
+    DELETED = "deleted"
 
 class Tenant(Base):
     __tablename__ = "tenants"
@@ -10,9 +22,23 @@ class Tenant(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String, unique=True, index=True, nullable=False)
     description = Column(String, nullable=True)
-    is_active = Column(Boolean, default=True)
+    status = Column(Enum(TenantStatus), default=TenantStatus.ACTIVE)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    configs = relationship("TenantConfig", back_populates="tenant")
+
+class TenantConfig(Base):
+    __tablename__ = "tenant_configs"
+    
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id = Column(UUID(as_uuid=True), ForeignKey('tenants.id'), nullable=False)
+    key = Column(String, nullable=False)
+    value = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    tenant = relationship("Tenant", back_populates="configs")
 
 def create_tenant(name, description=None, is_active=True):
     """

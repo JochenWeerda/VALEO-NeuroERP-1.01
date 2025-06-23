@@ -238,4 +238,8 @@ const modernTheme = (mode: ThemeMode, parameters: ThemeParameters) => {
   return createTheme(themeOptions);
 };
 
-export default modernTheme; 
+export const getModernTheme = (mode: ThemeMode): ExtendedThemeOptions => {
+  // ... existing code ...
+};
+
+export default getModernTheme; 

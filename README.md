@@ -1,6 +1,14 @@
-# VALEO - Die NeuroERP Version 1.01
+# VALEO - Die NeuroERP Version 1.02
 
 Ein umfassendes ERP-System für Großhandel, hier als Kundenprojekt für einen Landhandel, das speziell auf die Anforderungen der Landwirtschaftsbranche zugeschnitten ist.
+
+## Aktuelle Änderungen (Version 1.02)
+
+- Frontend-Server läuft jetzt stabil auf Port 3010 (oder alternativem Port, falls belegt)
+- Backend-Server läuft auf Port 8000
+- Verbesserte Babel- und ESBuild-Konfiguration für React/JSX
+- Optimierte PowerShell-Skripte für Windows-Kompatibilität
+- Behobene Port-Konflikte und Dependency-Probleme
 
 ## Projektübersicht
 
@@ -17,7 +25,7 @@ Das ERP-System besteht aus mehreren Komponenten:
 
 ```powershell
 # PowerShell-Skript für einfachen Start
-.\start_frontend.ps1
+.\scripts\start_frontend.ps1
 ```
 
 oder manuell:
@@ -27,7 +35,7 @@ cd frontend
 npm run dev
 ```
 
-Das Frontend ist dann unter http://localhost:3001 verfügbar.
+Das Frontend ist dann unter http://localhost:3010 verfügbar (oder einem alternativen Port).
 
 ### Finance-Service starten
 
@@ -44,6 +52,22 @@ Der Finance-Service ist dann unter http://localhost:8007 verfügbar.
 ```
 
 Der Beleg-Service ist dann unter http://localhost:8005 verfügbar.
+
+### Backend starten
+
+```powershell
+# PowerShell-Skript für einfachen Start
+.\scripts\start_backend.ps1
+```
+
+oder manuell:
+
+```powershell
+cd backend
+uvicorn main:app --reload
+```
+
+Das Backend ist dann unter http://localhost:8000 verfügbar.
 
 ## Projektstruktur
 

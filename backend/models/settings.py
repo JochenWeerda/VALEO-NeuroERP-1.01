@@ -1,22 +1,50 @@
+"""
+Einstellungsmodelle für das ERP-System.
+"""
+
 import uuid
 from datetime import datetime
-from sqlalchemy import Column, String, Boolean, DateTime, JSON
+from sqlalchemy import Column, String, Boolean, DateTime, JSON, ForeignKey, Integer
+from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
-from .base import Base, SessionLocal
+from backend.db.database import Base
 
-class SystemSettings(Base):
-    __tablename__ = "system_settings"
+class Setting(Base):
+    __tablename__ = "settings"
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    system_name = Column(String, nullable=False, default="AI-getriebenes ERP-System")
-    version = Column(String, nullable=False)
-    is_initialized = Column(Boolean, default=False)
-    multi_tenant_enabled = Column(Boolean, default=True)
-    roles_enabled = Column(Boolean, default=True)
-    maintenance_mode = Column(Boolean, default=False)
-    custom_settings = Column(JSON, nullable=True)
+    key = Column(String, nullable=False, unique=True)
+    value = Column(JSON, nullable=True)
+    description = Column(String, nullable=True)
+    category_id = Column(Integer, ForeignKey('setting_categories.id'))
+    is_system = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    category = relationship("SettingCategory", back_populates="settings")
+    values = relationship("SettingValue", back_populates="setting")
+
+class SettingCategory(Base):
+    __tablename__ = "setting_categories"
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False, unique=True)
+    description = Column(String, nullable=True)
+    
+    settings = relationship("Setting", back_populates="category")
+
+class SettingValue(Base):
+    __tablename__ = "setting_values"
+    
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    setting_id = Column(UUID(as_uuid=True), ForeignKey('settings.id'))
+    value = Column(JSON, nullable=True)
+    tenant_id = Column(UUID(as_uuid=True), ForeignKey('tenants.id'), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    setting = relationship("Setting", back_populates="values")
+    tenant = relationship("Tenant")
 
 def get_system_settings():
     """

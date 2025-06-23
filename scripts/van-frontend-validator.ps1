@@ -45,7 +45,7 @@ $tsConfigPath = Join-Path $frontendDir "tsconfig.json"
 # Banner ausgeben
 Write-Host ""
 Write-Host " ======================================================" -ForegroundColor Cyan
-Write-Host "  VAN-Modus Frontend-Validator - Folkerts Landhandel ERP" -ForegroundColor Cyan
+Write-Host "  VAN-Modus Frontend-Validator - VALEO NeuroERP" -ForegroundColor Cyan
 Write-Host " ======================================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -66,14 +66,14 @@ function Register-Check {
     
     if ($Result) {
         $script:passedChecks++
-        Write-Success "[✓] $Name"
+        Write-Success "[OK] $Name"
     } else {
         $script:failedChecks++
         if ($Corrected) {
             $script:correctedChecks++
             Write-Warning "[!] $Name (Korrigiert)"
         } else {
-            Write-Error "[✗] $Name"
+            Write-Error "[X] $Name"
         }
     }
 }
@@ -113,47 +113,46 @@ Register-Check -Result $packageJsonExists -Name "package.json existiert"
 if (-not $packageJsonExists) {
     Write-Info "Erstelle standard package.json..."
     
-    @"
-{
-  "name": "folkerts-landhandel-erp-frontend",
-  "description": "Frontend für das Folkerts Landhandel ERP-System",
-  "version": "1.2.0",
-  "private": true,
-  "scripts": {
-    "start": "vite",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx"
-  },
-  "dependencies": {
-    "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.11.16",
-    "@mui/lab": "^5.0.0-alpha.129",
-    "@mui/material": "^5.13.1",
-    "@mui/x-data-grid": "^6.4.0",
-    "@mui/x-date-pickers": "^6.4.0",
-    "axios": "^1.4.0",
-    "chart.js": "^4.3.0",
-    "react": "^18.2.0",
-    "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.11.1"
-  },
-  "devDependencies": {
-    "@types/react": "^18.2.6",
-    "@types/react-dom": "^18.2.4",
-    "@vitejs/plugin-react": "^4.0.0",
-    "eslint": "^8.40.0",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "typescript": "^5.0.4",
-    "vite": "^4.3.5"
-  }
-}
-"@ | Out-File -FilePath $packageJsonPath -Encoding utf8
+    $packageJsonContent = @{
+        name = "valeo-neuroerp-frontend"
+        description = "Frontend für das VALEO NeuroERP-System"
+        version = "1.2.0"
+        private = $true
+        scripts = @{
+            start = "vite"
+            dev = "vite"
+            build = "vite build"
+            preview = "vite preview"
+            lint = "eslint src --ext .js,.jsx,.ts,.tsx"
+        }
+        dependencies = @{
+            "@emotion/react" = "^11.11.0"
+            "@emotion/styled" = "^11.11.0"
+            "@mui/icons-material" = "^5.11.16"
+            "@mui/lab" = "^5.0.0-alpha.129"
+            "@mui/material" = "^5.13.1"
+            "@mui/x-data-grid" = "^6.4.0"
+            "@mui/x-date-pickers" = "^6.4.0"
+            "axios" = "^1.4.0"
+            "chart.js" = "^4.3.0"
+            "react" = "^18.2.0"
+            "react-chartjs-2" = "^5.2.0"
+            "react-dom" = "^18.2.0"
+            "react-router-dom" = "^6.11.1"
+        }
+        devDependencies = @{
+            "@types/react" = "^18.2.6"
+            "@types/react-dom" = "^18.2.4"
+            "@vitejs/plugin-react" = "^4.0.0"
+            "eslint" = "^8.40.0"
+            "eslint-plugin-react" = "^7.32.2"
+            "eslint-plugin-react-hooks" = "^4.6.0"
+            "typescript" = "^5.0.4"
+            "vite" = "^4.3.5"
+        }
+    }
     
+    $packageJsonContent | ConvertTo-Json -Depth 10 | Set-Content -Path $packageJsonPath -Encoding UTF8
     Register-Check -Result $true -Name "package.json erstellt" -Corrected $true
 } else {
     # Prüfe, ob Skripte in package.json vorhanden sind

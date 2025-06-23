@@ -1,74 +1,83 @@
 {
-  "name": "valeo-neuroerp-frontend",
-  "description": "Frontend für das VALEO - Die NeuroERP System",
-  "version": "1.2.0",
-  "private": true,
-  "scripts": {
-    "start": "vite",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.11.16",
-    "@mui/lab": "^5.0.0-alpha.129",
-    "@mui/material": "^5.13.1",
-    "@mui/x-data-grid": "^6.4.0",
-    "@mui/x-date-pickers": "^6.4.0",
-    "axios": "^1.4.0",
-    "chart.js": "^4.3.0",
-    "date-fns": "^2.30.0",
-    "dayjs": "^1.11.7",
-    "lodash": "^4.17.21",
-    "notistack": "^3.0.1",
-    "react": "^18.2.0",
-    "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18.2.0",
-    "react-hook-form": "^7.43.9",
-    "react-query": "^3.39.3",
-    "react-router-dom": "^6.11.2",
-    "recoil": "^0.7.7",
-    "typescript": "^5.0.4",
-    "zod": "^3.21.4"
-  },
-  "devDependencies": {
-    "@types/lodash": "^4.14.194",
-    "@types/node": "^20.2.1",
-    "@types/react": "^18.2.6",
-    "@types/react-dom": "^18.2.4",
-    "@typescript-eslint/eslint-plugin": "^5.59.6",
-    "@typescript-eslint/parser": "^5.59.6",
-    "@vitejs/plugin-react": "^4.0.0",
-    "cross-env": "^7.0.3",
-    "eslint": "^8.41.0",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "happy-dom": "^9.20.3",
-    "sass": "^1.62.1",
-    "terser": "^5.17.3",
-    "vite": "^4.3.8",
-    "vitest": "^0.31.1"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=8.0.0"
-  }
+    "name": "valeo-neuroerp-frontend",
+    "description": "Frontend für das VALEO - Die NeuroERP System",
+    "version": "1.2.0",
+    "private": true,
+    "scripts": {
+        "start": "vite",
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@emotion/react": "^11.14.0",
+        "@emotion/styled": "^11.14.0",
+        "@mui/icons-material": "^5.17.1",
+        "@mui/lab": "^5.0.0-alpha.129",
+        "@mui/material": "^5.17.1",
+        "@mui/x-data-grid": "^6.4.0",
+        "@mui/x-date-pickers": "^6.4.0",
+        "@reduxjs/toolkit": "^2.8.2",
+        "axios": "^1.4.0",
+        "chart.js": "^4.3.0",
+        "date-fns": "^2.30.0",
+        "dayjs": "^1.11.7",
+        "formik": "^2.4.6",
+        "lodash": "^4.17.21",
+        "notistack": "^3.0.1",
+        "react": "^18.2.0",
+        "react-chartjs-2": "^5.2.0",
+        "react-dom": "^18.2.0",
+        "react-hook-form": "^7.43.9",
+        "react-query": "^3.39.3",
+        "react-redux": "^9.2.0",
+        "react-router-dom": "^6.11.2",
+        "recoil": "^0.7.7",
+        "web-vitals": "^5.0.3",
+        "yup": "^1.6.1",
+        "zod": "^3.21.4"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.27.4",
+        "@babel/plugin-transform-react-jsx": "^7.27.1",
+        "@babel/preset-env": "^7.27.2",
+        "@babel/preset-react": "^7.27.1",
+        "@types/lodash": "^4.14.194",
+        "@types/node": "^20.19.1",
+        "@types/react": "^18.3.23",
+        "@types/react-dom": "^18.3.7",
+        "@typescript-eslint/eslint-plugin": "^5.59.6",
+        "@typescript-eslint/parser": "^5.59.6",
+        "@vitejs/plugin-react": "^4.0.0",
+        "cross-env": "^7.0.3",
+        "eslint": "^8.41.0",
+        "eslint-plugin-react": "^7.32.2",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "happy-dom": "^18.0.1",
+        "sass": "^1.62.1",
+        "terser": "^5.17.3",
+        "typescript": "^5.8.3",
+        "vite": "^6.3.5",
+        "vitest": "^3.2.4"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "engines": {
+        "node": ">=16.0.0",
+        "npm": ">=8.0.0"
+    }
 }

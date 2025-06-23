@@ -513,27 +513,18 @@ const NachhaltigkeitsErklaerungManager: React.FC<NachhaltigkeitsErklaerungManage
             </Typography>
             
             <FormControlLabel 
-              control={
-                <Checkbox
-                  checked={formData.direktfoerderung}
-                  onChange={handleFormChange}
-                  name="direktfoerderung"
-                  disabled={readOnly}
-                />
-              } 
-              label="Bei Zahlungen aus Direktförderungssystemen unterliege ich den Anforderungen für GAP-Konditionalität, die mindestens gleichwertige Anforderungen wie im REDcert-EU oder REDcert² System an die Erzeugung von landwirtschaftlicher Biomasse stellt und überwacht. Damit erfüllt die Biomasse die Anforderungen des REDcert-EU-Systemdokuments "Systemgrundsätze für die Erzeugung von Biomasse, Biokraftstoffen, flüssigen Biobrennstoffen und Biomasse-Brennstoffen" in seiner aktuellen Fassung." 
+              control={<Checkbox checked={formData.direktfoerderung} onChange={handleFormChange} name="direktfoerderung" disabled={readOnly} />}
+              label={`Bei Zahlungen aus Direktförderungssystemen unterliege ich den Anforderungen für GAP-Konditionalität, ` +
+                    `die mindestens gleichwertige Anforderungen wie im REDcert-EU oder REDcert² System an die Erzeugung von ` +
+                    `landwirtschaftlicher Biomasse stellt und überwacht. Damit erfüllt die Biomasse die Anforderungen des ` +
+                    `REDcert-EU-Systemdokuments 'Systemgrundsätze für die Erzeugung von Biomasse, Biokraftstoffen, flüssigen ` +
+                    `Biobrennstoffen und Biomasse-Brennstoffen' in seiner aktuellen Fassung.`}
             />
             
             <FormControlLabel 
-              control={
-                <Checkbox
-                  checked={formData.direktfoerderungVorjahr}
-                  onChange={handleFormChange}
-                  name="direktfoerderungVorjahr"
-                  disabled={readOnly}
-                />
-              } 
-              label="Ich habe im vergangenen Kalenderjahr an den EU-Direktförderungsprogrammen teilgenommen. Als Nachweis der Konformität mit den gestellten Anforderungen dient die Mitteilung über die Teilnahme an einem solchen System." 
+              control={<Checkbox checked={formData.direktfoerderungVorjahr} onChange={handleFormChange} name="direktfoerderungVorjahr" disabled={readOnly} />}
+              label={`Ich habe im vergangenen Kalenderjahr an den EU-Direktförderungsprogrammen teilgenommen. Als Nachweis ` +
+                    `der Konformität mit den gestellten Anforderungen dient die Mitteilung über die Teilnahme an einem solchen System.`}
             />
             
             <FormControlLabel 
@@ -618,7 +609,9 @@ const NachhaltigkeitsErklaerungManager: React.FC<NachhaltigkeitsErklaerungManage
                   disabled={readOnly}
                 />
               } 
-              label="Es können Nachweise dafür erbracht werden, dass diese Biomasse die REDcert2-Systemanforderungen erfüllt. Ich erfülle die Anforderungen des REDcert²-Dokuments "Systemgrundsätze für die Erzeugung von Biomasse im Bereich Lebensmittelproduktion" in seiner aktuellen Fassung." 
+              label={`Es können Nachweise dafür erbracht werden, dass diese Biomasse die REDcert2-Systemanforderungen erfüllt. ` +
+                    `Ich erfülle die Anforderungen des REDcert²-Dokuments 'Systemgrundsätze für die Erzeugung von Biomasse im ` +
+                    `Bereich Lebensmittelproduktion' in seiner aktuellen Fassung.`}
             />
           </Paper>
           

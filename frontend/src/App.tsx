@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './themes';
 import Layout from './components/Layout.tsx';
 import Dashboard from './pages/Dashboard';
@@ -28,8 +28,12 @@ import BelegfolgeRoutes from './routes/BelegfolgeRoutes';
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider>
-      <Router>
+    <Router future={{ 
+      v7_relativeSplatPath: true,
+      v7_startTransition: true,
+      basename: window.location.pathname
+    }}>
+      <ThemeProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
@@ -81,8 +85,8 @@ const App: React.FC = () => {
           <Route path="/mobile/aufgaben" element={<MobileScannerPage />} />
           <Route path="/mobile/aufgaben/:typ/:id" element={<MobileScannerPage />} />
         </Routes>
-      </Router>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Router>
   );
 };
 

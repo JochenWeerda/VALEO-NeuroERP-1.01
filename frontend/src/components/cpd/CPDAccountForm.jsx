@@ -80,13 +80,6 @@ const CPDAccountForm = ({ mode = 'create' }) => {
     // CPD Konto spezifisch
     customerNumber: 'C-54321',
     invoiceAddress: 'Hauptstraße 45, 23456 Beispielstadt',
-    branchOffice: 'Zentrale',
-    costCenter: 'Verwaltung',
-    invoiceType: 'Standard',
-    collectiveInvoice: true,
-    invoiceForm: 'Digital',
-    salesRep: 'Schmidt',
-    region: 'Ost',
     paymentTerms: '14 Tage 2% Skonto, 30 Tage netto',
     
     // Genossenschaftsanteile

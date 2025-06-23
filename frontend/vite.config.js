@@ -10,7 +10,43 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      // Babel-Konfiguration wird aus babel.config.js geladen
+      fastRefresh: true,
+      jsxRuntime: 'automatic'
+    })
+  ],
+  
+  // JSX/TSX-Konfiguration
+  esbuild: {
+    jsxFactory: 'React.createElement',
+    jsxFragment: 'React.Fragment',
+    target: 'es2020'
+  },
+  
+  // Server-Konfiguration
+  server: {
+    port: 3000,
+    strictPort: false,
+    host: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  },
+  
+  // Build-Optimierungen
+  build: {
+    target: 'es2020',
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: true,
+    minify: 'esbuild'
+  },
   
   // Verbesserte Alias-Konfiguration für Import-Pfade
   resolve: {
@@ -20,49 +56,11 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, './src/pages'),
       '@services': path.resolve(__dirname, './src/services'),
       '@utils': path.resolve(__dirname, './src/utils'),
-      '@contexts': path.resolve(__dirname, './src/contexts'),
-      '@styles': path.resolve(__dirname, './src/styles'),
       '@assets': path.resolve(__dirname, './src/assets'),
-    }
-  },
-
-  // Konfiguration für JSX/TSX-Dateien
-  esbuild: {
-    loader: { 
-      '.js': 'jsx', 
-      '.ts': 'tsx'
+      '@styles': path.resolve(__dirname, './src/styles'),
+      '@themes': path.resolve(__dirname, './src/themes')
     },
-    jsxFactory: 'React.createElement',
-    jsxFragment: 'React.Fragment'
-  },
-
-  // Server-Konfiguration
-  server: {
-    port: 5173,
-    strictPort: false, // Fallback auf anderen Port, wenn 5173 belegt ist
-    open: true, // Browser automatisch öffnen
-    cors: true, // CORS für API-Anfragen aktivieren
-    proxy: {
-      // API-Proxy-Konfiguration für Backend-Anfragen
-      '/api': {
-        target: 'http://localhost:8003',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
-  },
-
-  // Build-Konfiguration
-  build: {
-    outDir: 'dist',
-    sourcemap: true,
-    minify: 'terser',
-    target: 'es2018', // Kompatibilität mit älteren Browsern
-    terserOptions: {
-      compress: {
-        drop_console: true // Console-Ausgaben in Produktionsbuilds entfernen
-      }
-    }
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
   },
 
   // Optimierungen
@@ -76,3 +74,5 @@ export default defineConfig({
     ]
   }
 }); 
+
+

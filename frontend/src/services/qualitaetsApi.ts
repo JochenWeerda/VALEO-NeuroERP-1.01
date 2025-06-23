@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_BASE_URL } from './api';
+import { API_URL } from './api';
 
 // Typdefinitionen
 export interface QualitaetsParameter {
@@ -157,14 +157,14 @@ export interface QualitaetsPruefung {
 }
 
 // API-Endpunkte
-const QUALITAET_ENDPOINT = `${API_BASE_URL}/qualitaet`;
+const QUALITAET_ENDPOINT = `${API_URL}/qualitaet`;
 const PRUEFUNGEN_ENDPOINT = `${QUALITAET_ENDPOINT}/pruefungen`;
 const VORLAGEN_ENDPOINT = `${QUALITAET_ENDPOINT}/vorlagen`;
 const PARAMETER_ENDPOINT = `${QUALITAET_ENDPOINT}/parameter`;
-const CHARGEN_ENDPOINT = `${API_BASE_URL}/chargen`;
-const LIEFERANTEN_ENDPOINT = `${API_BASE_URL}/lieferanten`;
-const DOKUMENTE_ENDPOINT = `${API_BASE_URL}/dokumente`;
-const RAPS_ANLIEFERUNGEN_ENDPOINT = `${API_BASE_URL}/raps-anlieferungen`;
+const CHARGEN_ENDPOINT = `${API_URL}/chargen`;
+const LIEFERANTEN_ENDPOINT = `${API_URL}/lieferanten`;
+const DOKUMENTE_ENDPOINT = `${API_URL}/dokumente`;
+const RAPS_ANLIEFERUNGEN_ENDPOINT = `${API_URL}/raps-anlieferungen`;
 
 // API-Funktionen für Qualitätsprüfungen
 export const getAllPruefungen = async (): Promise<QualitaetsPruefung[]> => {

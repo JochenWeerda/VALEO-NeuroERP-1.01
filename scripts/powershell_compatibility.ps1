@@ -214,5 +214,31 @@ function Set-JSXConfiguration {
     return $true
 }
 
-# Exportiere alle Funktionen
-Export-ModuleMember -Function * 
+# Verzeichniswechsel-Funktion mit Fehlerbehandlung
+function Set-WorkingDirectory {
+    param (
+        [string]$Path
+    )
+    try {
+        Push-Location $Path
+        return $true
+    } catch {
+        Write-Error "Konnte nicht in das Verzeichnis wechseln: $Path"
+        return $false
+    }
+}
+
+# Umgebungsvariablen-Management
+function Set-EnvVar {
+    param (
+        [string]$Name,
+        [string]$Value
+    )
+    try {
+        [System.Environment]::SetEnvironmentVariable($Name, $Value, [System.EnvironmentVariableTarget]::Process)
+        return $true
+    } catch {
+        Write-Error "Fehler beim Setzen der Umgebungsvariable $Name"
+        return $false
+    }
+} 

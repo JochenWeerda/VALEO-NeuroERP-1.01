@@ -1,6 +1,6 @@
 {
   "name": "valeo-neuroerp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "KI-gestütztes ERP-System für Folkerts Landhandel",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JochenWeerda/VALEO-NeuroERP-1.01.git"
+    "url": "git+https://github.com/JochenWeerda/VALEO-NeuroERP-1.02.git"
   },
   "keywords": [
     "erp",
@@ -39,14 +39,19 @@
   "license": "UNLICENSED",
   "private": true,
   "bugs": {
-    "url": "https://github.com/JochenWeerda/VALEO-NeuroERP-1.01/issues"
+    "url": "https://github.com/JochenWeerda/VALEO-NeuroERP-1.02/issues"
   },
-  "homepage": "https://github.com/JochenWeerda/VALEO-NeuroERP-1.01#readme",
+  "homepage": "https://github.com/JochenWeerda/VALEO-NeuroERP-1.02#readme",
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.8.2",
+    "html-to-image": "^1.11.13",
+    "react-bootstrap": "^2.10.10",
+    "react-helmet": "^6.1.0",
+    "react-to-print": "^3.1.0",
     "react-virtualized-auto-sizer": "^1.0.26",
     "react-window": "^1.8.11"
   }

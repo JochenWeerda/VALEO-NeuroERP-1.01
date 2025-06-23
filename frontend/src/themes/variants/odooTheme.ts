@@ -303,4 +303,6 @@ export const getOdooTheme = (mode: ThemeMode): ExtendedThemeOptions => {
     spacing: 8,
     visualDensity: 0, // Standard-Dichte
   };
-}; 
+};
+
+export default getOdooTheme; 

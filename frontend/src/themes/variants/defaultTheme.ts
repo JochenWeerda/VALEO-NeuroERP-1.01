@@ -201,4 +201,6 @@ export const getDefaultTheme = (mode: ThemeMode): ExtendedThemeOptions => {
       },
     },
   };
-}; 
+};
+
+export default getDefaultTheme; 

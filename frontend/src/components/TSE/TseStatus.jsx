@@ -11,8 +11,12 @@ import {
   Button,
   Alert
 } from '@mui/material';
-import IconSet from '../IconSet';
-import api from '../../services/api';
+import {
+  Refresh as RefreshIcon,
+  CheckCircle as CheckCircleIcon,
+  Error as ErrorIcon
+} from '@mui/icons-material';
+import api from '../../services/api.ts';
 
 const TseStatus = () => {
   const [loading, setLoading] = useState(true);
@@ -76,7 +80,7 @@ const TseStatus = () => {
           <Button 
             variant="outlined" 
             onClick={fetchTseStatus}
-            startIcon={<IconSet icon="refresh" />}
+            startIcon={<RefreshIcon />}
           >
             Aktualisieren
           </Button>
@@ -92,10 +96,7 @@ const TseStatus = () => {
                 </Typography>
                 <Chip
                   icon={
-                    <IconSet 
-                      icon={tseStatus.status === 'aktiv' ? 'check_circle' : 'error'} 
-                      size="small"
-                    />
+                    tseStatus.status === 'aktiv' ? <CheckCircleIcon fontSize="small" /> : <ErrorIcon fontSize="small" />
                   }
                   label={tseStatus.status === 'aktiv' ? 'Aktiv' : 'Inaktiv'}
                   color={tseStatus.status === 'aktiv' ? 'success' : 'error'}

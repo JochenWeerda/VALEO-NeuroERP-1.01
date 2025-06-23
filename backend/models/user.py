@@ -4,7 +4,7 @@ Benutzermodell für das ERP-System.
 
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Table, Enum
 from sqlalchemy.orm import relationship
-from backend.db.database import Base
+from db.database import Base, SessionLocal
 import datetime
 import uuid
 import enum

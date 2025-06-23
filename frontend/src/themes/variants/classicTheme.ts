@@ -288,4 +288,8 @@ const classicTheme = (mode: ThemeMode, parameters: ThemeParameters) => {
   return createTheme(themeOptions);
 };
 
-export default classicTheme; 
+export const getClassicTheme = (mode: ThemeMode): ExtendedThemeOptions => {
+  // ... existing code ...
+};
+
+export default getClassicTheme; 
