@@ -1,0 +1,50 @@
+# Codex-Implementierungsauftrag – Automatisierung der GENXAIS-Zyklen v1.2
+
+name: Automatisierter GENXAIS-Zyklus v1.2
+type: multi-phase-cycle
+phases: [VAN, PLAN, CREATE, IMPLEMENTATION, REFLEKTION]
+trigger: manual|cron|webhook
+agent: codex
+
+context:
+  db: MongoDB
+  orchestrator: LangGraph
+  memory: MCP
+  ui: Streamlit
+
+steps:
+  - id: detect_last_completed_phase
+    goal: Finde die zuletzt abgeschlossene Phase in MongoDB
+    result_var: last_phase
+
+  - id: extract_review
+    depends_on: detect_last_completed_phase
+    goal: Hole den `review.summary` Text zur letzten Phase
+    output: review_context
+
+  - id: call_gpt_planner
+    goal: Erzeuge neuen Prompt für die nächste Phase mit GPT-4
+    input: "{{review_context}}"
+    output: next_prompt
+    tools:
+      - openai.chat
+    config:
+      model: gpt-4
+      temperature: 0.4
+      max_tokens: 1200
+
+  - id: store_prompt
+    goal: Speichere Prompt in MongoDB als pending prompt für LangGraph
+    collection: prompts
+    document:
+      phase: "{{next_phase}}"
+      prompt: "{{next_prompt}}"
+      status: pending
+
+  - id: trigger_langgraph
+    goal: Starte LangGraph-Execution mit `next_prompt`
+    endpoint: http://localhost:8000/trigger
+    input: { phase: "{{next_phase}}" }
+
+  - id: update_status
+    goal: Protokolliere Phase in `logs` Collection + UI-Update
