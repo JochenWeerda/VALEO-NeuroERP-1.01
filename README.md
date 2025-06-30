@@ -451,3 +451,19 @@ Nach dem Start des Servers kann die Swagger-Dokumentation unter http://localhost
 3. Persistente Redis-Konfiguration für Produktionsumgebungen
 4. Implementierung von Sicherheitsfeatures
 5. Docker-Compose-Setup für die Entwicklungsumgebung
+
+### StreamUI f\u00fcr GENXAIS
+
+Zur Steuerung der GENXAIS-Framework-Zyklen steht eine einfache Streamlit-basierte UI zur Verf\u00fcgung. Die Anwendung l\u00e4sst sich mit folgendem Skript starten:
+
+```bash
+./scripts/start_stream_ui.sh
+```
+
+Unter Windows kann das analoge PowerShell-Skript genutzt werden:
+
+```powershell
+./scripts/start_stream_ui.ps1
+```
+
+Nach dem Start ist das Interface \u00fcblicherweise unter http://localhost:8501 erreichbar.
